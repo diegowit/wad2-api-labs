@@ -3,9 +3,10 @@ import express from 'express';
 import tasksRouter from './api/tasks';
 import './db/index.js';
 import cors from 'cors';
+import authenticate from './authenticate';
+import usersRouter from './api/users';
 dotenv.config();
 
-import usersRouter from './api/users';
 
 const errHandler = (err, req, res, next) => {
   /* if the error in development then send stack trace to display whole error,
@@ -27,7 +28,7 @@ app.use(express.json());
 app.use('/api/tasks', tasksRouter);
 app.use('/api/users', usersRouter);
 app.use(errHandler);  // - error handler must come AFTER r o u t e s
-
+app.use('/api/tasks', authenticate, tasksRouter);
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
 });
