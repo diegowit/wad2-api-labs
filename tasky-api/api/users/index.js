@@ -1,8 +1,9 @@
 import express from 'express';
-import User from './userModel';
+import User from './userModel.js';
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 const router = express.Router(); // eslint-disable-line
+
 
 // Get all users
 router.get('/', async (req, res) => {
@@ -30,14 +31,37 @@ router.post('/', asyncHandler(async (req, res) => {
     }
 }));
 
+const strongPasswordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 
+const registerUser = async (req, res) => {
+  try {
+    const { username, password } = req.body;
 
-async function registerUser(req, res) {
-    // Add input validation logic here
-    await User.create(req.body);
-    res.status(201).json({ success: true, msg: 'User successfully created.' });
-}
+    if (!strongPasswordRegex.test(password)) {
+      return res.status(400).json({
+        success: false,
+        msg:
+          'Password must be at least 8 characters long and contain a letter, a number, and a special character'
+      });
+    }
+
+    const user = new User({ username, password });
+    await user.save();
+
+    return res.status(201).json({
+      success: true,
+      msg: 'Successful created new user'
+    });
+  } catch (err) {
+    // Duplicate username
+    if (err.code === 11000) {
+      return res.status(409).json({ success: false, msg: 'Username already exists' });
+    }
+    return res.status(500).json({ success: false, msg: err.message });
+  }
+};
 
 async function authenticateUser(req, res) {
     const user = await User.findByUserName(req.body.username);
