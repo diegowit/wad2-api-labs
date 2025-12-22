@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import LoginPage from "./pages/loginPage";
@@ -9,7 +10,6 @@ import ProfilePage from "./pages/profilePage";
 import AuthContextProvider from "./contexts/authContext";
 import ProtectedRoutes from "./protectedRoutes";
 import './App.css';
-import Header from "./components/SiteHeader";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,7 +27,7 @@ const App = () => {
       <BrowserRouter>
         <AuthContextProvider>
           <div className="container">
-            <Header />
+            <h1>Tasky</h1>
             <Routes>
               <Route path="/" element={< StartPage />} />
               <Route path="/login" element={< LoginPage />} />

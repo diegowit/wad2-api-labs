@@ -64,3 +64,4 @@ export const signup = async (username, password) => {
     });
     return response.json();
 };
+
