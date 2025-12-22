@@ -26,7 +26,7 @@ app.use(express.json());
 
 app.use('/api/tasks', tasksRouter);
 app.use('/api/users', usersRouter);
-app.use(errHandler);  // - error handler must come AFTER routes
+app.use(errHandler);  // - error handler must come AFTER r o u t e s
 
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
